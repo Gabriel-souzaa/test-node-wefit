@@ -1,0 +1,45 @@
+// This is your Prisma schema file String
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ProfileCommercial {
+  id String @id @default(uuid())
+
+  client     String
+  cpf        String
+  cnpj       String?
+  name       String
+  phone      String
+  home_phone String
+  email      String
+
+  addres_profile AddressProfile[]
+
+  @@map("profile_commercial")
+}
+
+model AddressProfile {
+  id String @id @default(uuid())
+
+  zip_code     String
+  steet        String
+  numbero      String
+  complement   String?
+  city         String
+  state        String
+  neighborhood String
+
+  profile_id String
+
+  profile ProfileCommercial @relation(fields: [profile_id], references: [id])
+
+  @@map("address_profile")
+}

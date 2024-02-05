@@ -1,21 +1,15 @@
-FROM node:lts-alpine AS builder
+FROM node:latest AS builder
 
 WORKDIR /app
 
 COPY . .
-
-RUN npm install
-
-RUN npm run build
-
-FROM node:lts-alpine AS final
-
-WORKDIR /app
-
-COPY --from=builder ./app/dist ./dist
-
 COPY package*.json .
 
+RUN npx prisma generate
+# RUN npx prisma migrate deploy
+RUN npm run build
 RUN npm install
+
+EXPOSE 3333
 
 CMD ["npm", "run", "start"]

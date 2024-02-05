@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ErrorHandler } from "../utils/errors";
 import { CreateProfile } from "../services/createProfile.service";
+import { DeleteProfile } from "../services/deleteProfile.service";
 
 export class Profile {
   async create(request: Request, response: Response, next: NextFunction) {
@@ -49,6 +49,24 @@ export class Profile {
       return response.json({
         success: true,
         data: result
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async delete(request: Request, response: Response, next: NextFunction) {
+    try {
+      const {
+        id
+      } = request.params;
+
+      const service = new DeleteProfile();
+
+      await service.execute(id);
+
+      return response.json({
+        success: true,
       });
     } catch (err) {
       next(err);

@@ -3,8 +3,9 @@ import { Profile } from "../controllers";
 
 const router = Router();
 
-const createProfileController = new Profile();
+const profileController = new Profile();
 
-router.post('/create', (req, res, next) => createProfileController.create(req, res, next));
+router.post('/profile/create', (req, res, next) => profileController.create(req, res, next));
+router.delete('/profile/:id', (req, res, next) => profileController.delete(req, res, next));
 
 export default router;

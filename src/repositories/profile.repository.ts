@@ -82,4 +82,38 @@ export class ProfileRepository {
       throw new ErrorHandler(500, "Não foi possível buscar perfil.");
     }
   }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await prisma.$transaction(async (prismaTransaction) => {
+        await prismaTransaction.addressProfile.deleteMany({
+          where: {
+            profile_id: id,
+          }
+        });
+
+        await prismaTransaction.profileCommercial.delete({
+          where: {
+            id,
+          }
+        });
+      })
+    } catch (err) {
+      throw new ErrorHandler(500, 'Não foi possível deletar perfil')
+    }
+  }
+
+  async findById(id: string): Promise<ProfileEntity> {
+    try {
+      const response = await prisma.profileCommercial.findUnique({
+        where: {
+          id
+        }
+      });
+
+      return response;
+    } catch (err) {
+      throw new ErrorHandler(500, "Não foi possível buscar perfil.");
+    }
+  }
 }
